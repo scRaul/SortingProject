@@ -29,25 +29,31 @@ function quickSort(list, p, r, swapList,asc=true){
     quickSort(list,p,q-1,swapList,asc);
     quickSort(list,q+1,r,swapList,asc);
 }
-// void insertSort(vector<double> &v,bool asc){
-//     for(int j = 1; j < v.size();j++){
-//         double key = v[j];
-//         int i = j-1;
-//         if(asc){
-//             while( i >= 0 && v[i] > key ){
-//                 v[i+1] =v[i];
-//                 i--;
-//             }
-//         }else{
-//             while( i >= 0 && v[i] < key ){
-//                 v[i+1] =v[i];
-//                 i--;
-//             }
-//         }
-//         v[i+1] = key;
-//     }
-//     
-// }
+function insertSort(list,swapList,asc=true){
+    for(let j = 1; j < list.length;j++){
+        key = list[j];
+        i = j-1;
+        if(asc){
+            while( i >= 0 && list[i] > key ){
+                list[i+1] =list[i];
+                swapList.push(i+1);
+                swapList.push(i);
+                swapList.push(j);
+                i--;
+            }
+        }else{
+            while( i >= 0 && list[i] < key ){
+                list[i+1] = list[i];
+                i--;
+            }
+        }
+        list[i+1] = key;
+        swapList.push(i+1);
+        swapList.push(j);
+        swapList.push(j);
+    }
+    return swapList;
+}
 // 
 // void merge(vector<double> &v,int p,int q, int r,bool asc){
 //     int n = q-p;
