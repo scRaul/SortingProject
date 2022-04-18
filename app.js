@@ -1,6 +1,6 @@
 var screenW = 450;
 var screen;
-var delay = 1000/60;
+var delay = 1000/6;
 var n;// dim of squared number of tile, total = n*n 
 var tileW; //width to color each tile 
 
@@ -16,7 +16,7 @@ function setUp(dimension){
     screenW +=n;
     screen = new Screen('screen',screenW,screenW); 
     tileW = Math.floor((screenW-n)/n); 
-    console.log(tileW);
+   // console.log(tileW);
     screen.init();
     generatePositions();
 }
@@ -85,7 +85,7 @@ function shuffleColorOrder(){
 //-------- Animation related Things ----------
 
 
-
+var borderC =new Color(156, 158, 108);
 //object to be animated
 function Tile(x,y,w,color){
     this.x =x
@@ -126,7 +126,7 @@ function moveTile(sq,dist,diffX,diffY){
             sq.x -=1;
     }
     if(sq.y < dist[1]){
-        if(diffY > sq.h)
+        if(diffY > sq.w)
             sq.y += Math.floor(sq.w/2);
         else if(diffY > 3)
             sq.y +=2;
@@ -134,7 +134,7 @@ function moveTile(sq,dist,diffX,diffY){
             sq.y +=1;
     }
     if(sq.y > dist[1]){
-        if(diffY > sq.h)
+        if(diffY > sq.w)
             sq.y -= Math.floor(sq.w/2);
         else if(diffY > 3)
             sq.y -=2;
@@ -145,7 +145,7 @@ function moveTile(sq,dist,diffX,diffY){
 
 function AnimateQuickSort(){
 
-async function moveTo(sqi,sqj,i,j){
+async function moveTo(sqi,sqj,i,j,bi,bj){
     let start = new Date().getTime();
     
     let iDisp = getDisp(sqi,positions[j]);
@@ -153,8 +153,14 @@ async function moveTo(sqi,sqj,i,j){
     
     moveTile(sqi,positions[j],iDisp[0],iDisp[1]);
     moveTile(sqj,positions[i],jDisp[0],jDisp[1]);
+    bi.x = sqi.x;
+    bi.y = sqi.y;
+    bj.x = sqj.x;
+    bj.y = sqj.y;
     
     colorInPositions();
+    colorTile(bi);
+    colorTile(bj);
     colorTile(sqi);
     colorTile(sqj);
     
@@ -163,20 +169,20 @@ async function moveTo(sqi,sqj,i,j){
     await sleep(start + delay - new Date().getTime());
     
     if(iDisp[2]> 0 || jDisp[2] > 0 ){
-        moveTo(sqi,sqj,i,j);
+        moveTo(sqi,sqj,i,j,bi,bj);
     }
-    else if( P < swapOrder.length ){
-    
+    else{ 
         colorOrder[i] = sqj.color;
         colorOrder[j] = sqi.color;
-        
-        sortPair();
-    }else{
-        console.log("finished");
-        P = 0;
+        if( P < swapOrder.length ){
+            sortPair();
+        }else{
+            colorInPositions();
+            screen.render();
+            console.log("finished");
+        }
     }
 }
-
 var P = 0;
 function sortPair(){
     let i = swapOrder[P];
@@ -190,13 +196,17 @@ function sortPair(){
         let xj = positions[j][0];
         let yj = positions[j][1];
     
+        
         let ti = new Tile(xi,yi,tileW,colorOrder[i]);
+        let borderi = new Tile(xi,yi,tileW+4,borderC);
+
         let tj = new Tile(xj,yj,tileW,colorOrder[j]);
+        let borderj = new Tile(xj,yj,tileW+4,borderC);
         
         colorOrder[i] = new Color();
         colorOrder[j] = new Color();
         
-        moveTo(ti,tj,i,j);
+        moveTo(ti,tj,i,j,borderi,borderj);
     }
 }
 var swapOrder =[];// order to swap tiles back in order 
@@ -205,12 +215,95 @@ sortPair();
 
 }
 
+function AnimateInsertSort(){
+    var swapOrder =[];
+    insertSort(weights,swapOrder);
+    console.log(swapOrder);
+    var P = 0;
+    var key = -1; 
+    var colorK;
 
-setUp(9);
+    async function moveTo(i,j,k,copyK,sqj,bj){
+        let start = new Date().getTime();
+        let jDisp = getDisp(sqj,positions[i]);
+
+        moveTile(sqj,positions[i],jDisp[0],jDisp[1]);
+        bj.x = sqj.x;
+        bj.y = sqj.y;
+
+        colorInPositions();
+        colorTile(bj);
+        colorTile(sqj);
+        screen.render();
+
+        await sleep(start + delay - new Date().getTime());
+
+        if(jDisp[2] > 0 ){
+            moveTo(i,j,k,copyK,sqj,bj);
+        }else{
+            if(j == k){
+                colorOrder[i] = copyK;
+                key = -1; 
+            }else{
+                swapColorOrder(i,j);
+            }
+            colorInPositions();
+            screen.render();
+            if(P < swapOrder.length){
+                sortPair(); 
+            }else{
+                console.log("Finished");
+            }
+        }
+    }
+    function sortPair(){
+        let i = swapOrder[P];
+        let j = swapOrder[P+1];
+        if(key == -1 && i !=j){
+            key = swapOrder[P+2];
+            colorK = colorOrder[key];
+            colorOrder[key] = new Color(); 
+        }
+        P +=3;
+        if(i == j && P<swapOrder.length){
+            key = -1;
+            sortPair();
+        } 
+        else{
+            //console.log([i,j,key]);
+            let xj = positions[j][0];
+            let yj = positions[j][1];
+            let tj = new Tile(xj,yj,tileW,colorOrder[j]);
+            let borderj = new Tile(xj,yj,tileW+4,borderC);
+
+
+            moveTo(i,j,key,colorK,tj,borderj);
+        }
+    }
+    sortPair();
+
+
+}
+
+
+setUp(3);
 shuffleColorOrder();
+// swapColorOrder(0,7);
+// swapColorOrder(0,3);
+// swapColorOrder(0,8);
+// swapColorOrder(0,1);
+// swapColorOrder(0,6);
+// swapColorOrder(0,2);
+// swapColorOrder(3,5);
+console.log(weights);
 colorInPositions();
 screen.render();
-AnimateQuickSort();
+
+
+//AnimateQuickSort();
+
+AnimateInsertSort();
+
 
 
 

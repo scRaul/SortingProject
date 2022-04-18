@@ -29,6 +29,7 @@ function quickSort(list, p, r, swapList,asc=true){
     quickSort(list,p,q-1,swapList,asc);
     quickSort(list,q+1,r,swapList,asc);
 }
+
 function insertSort(list,swapList,asc=true){
     for(let j = 1; j < list.length;j++){
         key = list[j];
