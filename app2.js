@@ -19,6 +19,7 @@ function Rect(x,y,w,h,color){
     this.w = parseInt(w/2);
     this.h = parseInt(h/2); 
     this.color = color;
+    //this.animation = false; 
 }
 
 function copy(sq){
