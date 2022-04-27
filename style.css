@@ -5,3 +5,29 @@
   margin-right:auto; 
   border: 1px solid red;
 }
+#buttons{
+  display: flex;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: space-evenly;
+  width: 70%;
+}
+
+button{
+  width: 150px;
+  height: 50px;
+  color: white;
+}
+button:hover{
+  opacity: .7;
+}
+#Shuffle{
+  background-color: red;
+}
+#Quick{
+  background-color: green;
+}
+#Insert{
+  background-color: blue;
+}

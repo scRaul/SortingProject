@@ -11,6 +11,8 @@ function setUp(dimension){
     screenW +=n;
     screen = new Screen('screen',screenW,screenW); 
     screen.init();
+    tiles = [];
+    weights = [];
     tiles =  generateTiles(n,screenW,weights);
 }
 function render(){
@@ -36,13 +38,14 @@ function getDisp(sq,pos){
     return [diffX,diffY,dist];
 }
 var borderC =new Color(156, 158, 108);
-
+var stop = false;
 function AnimateInsertSort(){
     var prevPos = []; 
     var swapOrder =[];// order to swap tiles back in order 
     insertSort(weights,swapOrder);
     var P = 0;
     async function moveTo(i,j,k,position){
+        if(stop == true)return;
         let start = new Date().getTime();
 
         let jDisp = getDisp(tiles[i],position);
@@ -96,7 +99,7 @@ function AnimateQuickSort(){
     var P = 0;
 
     async function moveTo(i,j,positions){
-        
+        if(stop == true) return;
         let start = new Date().getTime();
       
         let iDisp = getDisp(tiles[i],positions[1]);
@@ -147,13 +150,57 @@ function AnimateQuickSort(){
 
 
 setUp(9);
-shuffleTiles(tiles,weights);
+render();
+
+var shufbtn = document.getElementById("Shuffle");
+var quickbtn = document.getElementById("Quick");
+var insertbtn = document.getElementById("Insert");
+
+
+shufbtn.addEventListener('click',reShuffle);
+quickbtn.addEventListener('click',tryQuickSort);
+insertbtn.addEventListener('click',tryInsert);
+
+async function reShuffle(){
+    await pause();
+    setUp(9);
+    screen.clearColor(new Color());
+    shuffleTiles(tiles,weights);
+    render();
+    quickbtn.disabled=false;
+    insertbtn.disabled=false;
+    quickbtn.style.opacity="1";
+    insertbtn.style.opacity="1";
+}
+function tryQuickSort(){
+    quickbtn.disabled=true;
+    insertbtn.disabled=true;
+    quickbtn.style.opacity=".6";
+    insertbtn.style.opacity=".6";
+    AnimateQuickSort();
+}
+function tryInsert(){
+    quickbtn.disabled=true;
+    insertbtn.disabled=true;
+    quickbtn.disabled=true;
+    quickbtn.style.opacity=".6";
+    insertbtn.style.opacity=".6";
+    AnimateInsertSort();
+}
+async function pause(){
+    console.log("Stoping");
+    stop = true;
+    await sleep(300);
+    stop = false;
+}
+
+
+
+
+
+
 // swapTiles(1,5,tiles,weights);
 // //swapTiles(0,15,tiles,weights);
 // swapTiles(10,5,tiles,weights);
 // swapTiles(9,4,tiles,weights);
 // swapTiles(2,7,tiles,weights);
-render();
-//AnimateQuickSort();
-console.log(weights);
-AnimateInsertSort();
