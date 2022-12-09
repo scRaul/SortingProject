@@ -157,7 +157,7 @@ void quickSort(vector<double> &v,int p,int r,bool asc){
     if ( p >= r) return;
     int q = part(v,p,r,asc);
     quickSort(v,p,q-1,asc);
-    quickSort(v,q+1,r,asc);
+    quickSort(v,q,r,asc);
 }
 void insertSort(vector<double> &v,bool asc){
     for(int j = 1; j < v.size();j++){
