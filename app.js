@@ -15,8 +15,6 @@ var screen = new Screen(screenW,screenH,incrementsX,'screenA');
 
 var input = new Input();
 var sorter = new BarSorter(); 
-var timer = new Timer();
-timer.setToCountUp();
 
 const fastFPS = 120; 
 const slowFPS = 10; 
@@ -126,7 +124,6 @@ function makeRandom(){
     adjustBarCount();
     sorter.randomizeBars(hList,barList);
     animiating = true;
-    timer.reset();
     document.getElementById('quickSort').style.display = 'none';
     document.getElementById('insertSort').style.display = 'none';
     document.getElementById('bubbleSort').style.display = 'none';
@@ -135,8 +132,6 @@ function Quick(){
     if(animiating) return;
     sorter.sort(hList,barList,SORT_TYPE.QUICK);
     animiating = true;
-    timer.reset();
-    timer.start();
     document.getElementById('quickSort').style.display = 'block';
     document.getElementById('insertSort').style.display = 'none';
     document.getElementById('bubbleSort').style.display = 'none';
@@ -145,8 +140,6 @@ function Insert(){
     if(animiating) return;
     sorter.sort(hList,barList,SORT_TYPE.INSERT);
     animiating = true;
-    timer.reset();
-    timer.start();
     document.getElementById('quickSort').style.display = 'none';
     document.getElementById('insertSort').style.display = 'block';
     document.getElementById('bubbleSort').style.display = 'none';
@@ -155,8 +148,6 @@ function Bubble(){
     if(animiating) return;
     sorter.sort(hList,barList,SORT_TYPE.BUBBLE);
     animiating = true;
-    timer.reset();
-    timer.start();
     document.getElementById('quickSort').style.display = 'none';
     document.getElementById('insertSort').style.display = 'none';
     document.getElementById('bubbleSort').style.display = 'block';

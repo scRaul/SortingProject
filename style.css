@@ -4,7 +4,7 @@ body{
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-color: rgb(123, 115, 141);
+/* background-color: rgb(123, 115, 141); */
     color: white
 }
 canvas{
