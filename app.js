@@ -108,7 +108,6 @@ function updateList(){
     }else{
         fps = slowFPS;
         animiating = false;
-        timer.reset();
     }
 }
 function adjustBarCount(){
