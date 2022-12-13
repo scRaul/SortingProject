@@ -7,6 +7,7 @@ class Bar{
     #ogColor;
     #w;
     #h;
+    #prevTime;
     constructor(w,h,pos,color){
         this.#w = w;
         this.#h = h;
@@ -29,16 +30,18 @@ class Bar{
     }
     isMoving(){return this.#bMoving;}
     getPos(){return this.#posX; }
+    getNextPos(){
+        if(this.#targetQ.length <= 0)
+            this.#targetX = null;
+        else{
+            this.#targetX = this.#targetQ.shift();
+            this.#bMoving = true;
+        }
+    }
     update(){
-        this.#bMoving = true;
-        //if current target is null either no target left, or one not assigned yet
         if(this.#targetX == null ){
-            if(this.#targetQ.length == 0 ){
                 this.#bMoving = false; // not target return 
                 return; 
-            }else{
-                this.#targetX = this.#targetQ.shift(); //get first target
-            }
         }
         // get distance from target location 
         var dist = this.#targetX -  this.#obj.getPos().x; 

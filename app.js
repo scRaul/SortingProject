@@ -15,6 +15,8 @@ var screen = new Screen(screenW,screenH,incrementsX,'screenA');
 
 var input = new Input();
 var sorter = new BarSorter(); 
+var timer = new Timer();
+timer.setToCountUp();
 
 const fastFPS = 120; 
 const slowFPS = 10; 
@@ -25,20 +27,7 @@ var fps = slowFPS;
 var barList = [];
 var hList = []; // going to use to sort
 
-function generateBars(bars=10){
-    barList = [];
-    hList = [];
-    var barW = (screenW) / bars; 
-    var startX = -incrementsX/2 + barW/2;
-    for(let i = 1; i <= bars; i++){
-        var barH = (i / bars) * screenH;
-        var pos = new Vec(startX + (i-1)*barW,(-incrementsY/2) + barH/2  );
-        var color = new Color(0,255-bars+i,255-bars+i); 
-        var bar = new Bar(barW,barH,pos, color);
-        barList.push(bar);
-        hList.push(i);
-    }
-}
+
 
 adjustBarCount();
 
@@ -59,6 +48,24 @@ async function loop(){
     screen.render();
     await new Promise(r => setTimeout(r,(startTime+delay)-Date.now() ));
     loop(); 
+}
+function generateBars(bars=10){
+    barList = [];
+    hList = [];
+    var barW = (screenW) / bars; 
+    var startX = -incrementsX/2 + barW/2;
+    for(let i = 1; i <= bars; i++){
+        var barH = (i / bars) * screenH;
+        var pos = new Vec(startX + (i-1)*barW,(-incrementsY/2) + barH/2  );
+        var color = new Color(0,255-bars+i,255-bars+i); 
+        var bar = new Bar(barW,barH,pos, color);
+        barList.push(bar);
+        hList.push(i);
+    }
+}
+function updateTimer(){
+    if(timer.getMsLeft() > 0)
+        console.log(timer.getMsLeft());
 }
 function handleInput(){
     if(!debugging) return;
@@ -89,11 +96,12 @@ function updateList(){
     dynamic = [];
     active = 0;
     for(let i = 0; i < barList.length;i++){ 
-        barList[i].update();
         if(barList[i].isMoving()==true){
             active++;
             dynamic.push(barList[i].getObj());
+            barList[i].update();
         }else{
+            barList[i].getNextPos();
             static.push(barList[i].getObj());
         }
     }
@@ -102,8 +110,8 @@ function updateList(){
     }else{
         fps = slowFPS;
         animiating = false;
+        timer.reset();
     }
-   
 }
 function adjustBarCount(){
     animiating =false;
@@ -118,6 +126,7 @@ function makeRandom(){
     adjustBarCount();
     sorter.randomizeBars(hList,barList);
     animiating = true;
+    timer.reset();
     document.getElementById('quickSort').style.display = 'none';
     document.getElementById('insertSort').style.display = 'none';
     document.getElementById('bubbleSort').style.display = 'none';
@@ -126,6 +135,8 @@ function Quick(){
     if(animiating) return;
     sorter.sort(hList,barList,SORT_TYPE.QUICK);
     animiating = true;
+    timer.reset();
+    timer.start();
     document.getElementById('quickSort').style.display = 'block';
     document.getElementById('insertSort').style.display = 'none';
     document.getElementById('bubbleSort').style.display = 'none';
@@ -134,6 +145,8 @@ function Insert(){
     if(animiating) return;
     sorter.sort(hList,barList,SORT_TYPE.INSERT);
     animiating = true;
+    timer.reset();
+    timer.start();
     document.getElementById('quickSort').style.display = 'none';
     document.getElementById('insertSort').style.display = 'block';
     document.getElementById('bubbleSort').style.display = 'none';
@@ -142,6 +155,8 @@ function Bubble(){
     if(animiating) return;
     sorter.sort(hList,barList,SORT_TYPE.BUBBLE);
     animiating = true;
+    timer.reset();
+    timer.start();
     document.getElementById('quickSort').style.display = 'none';
     document.getElementById('insertSort').style.display = 'none';
     document.getElementById('bubbleSort').style.display = 'block';
