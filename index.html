@@ -5,17 +5,78 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-
-    <script src="lib/screen.js"></script>
-    <script src="lib/screenObj.js"></script>
-    <script src="lib/math.js"></script>
-    <script src="lib/input.js"></script>
+     <link  rel="stylesheet" href="style.css">
+    <script src="lib/Screen.js"></script>
+    <script src="lib/ScreenObj.js"></script>
+    <script src="lib/vMath.js"></script>
+    <script src="lib/Input.js"></script>
     <script src="lib/Timer.js"></script>
 
     <script src="app.js" defer></script>
-    <script src="src/sort.js"></script>
+    <script src="src/bar.js"></script>
 </head>
 <body>
-    <canvas id="screen"></canvas>
+    <div>
+        <h3> A Visual Comparison Between Quicksorting, Insert Sorting, and Bubble Sorting </h3>
+    </div>
+    <canvas id="screenA"></canvas>
+    <div id="controls">
+        <label for="barCount"> n bars=</label>
+        <input type="number" id="barCount" min="10" max="255" value="32">
+        <button id="makeRandom" onclick='makeRandom()'>Randomize</button>
+        <button id="quickBttn" onclick='Quick()'>Quick Sort</button>
+        <button id="insertBttn" onclick='Insert()'>Insert Sort</button>
+        <button id="bubbleBttn"onclick='Bubble()'>Bubble Sort</button>
+    </div>
+    <div id="algorithms">
+        <pre id="bubbleSort">
+            <code> BubbleSort(list){
+                    for( i = 0 to list.length-1)
+                        for(j = 0 to list.length-1 - i )
+                            if(list[j] >list[j+1] )
+                                swap(list,j,j+1)
+            }
+
+            </code>
+        </pre>
+        <pre  id="insertSort">
+            <code> insertSort(list){
+                for(j = 1 to list.length) {
+                    key = v[j];
+                    i = j-1;
+                        while( i >= 0 && v[i] > key ){
+                            v[i+1] =v[i];
+                            i--;
+                        }
+                    v[i+1] = key;
+                }
+                
+            }
+            </code>
+        </pre>
+        <pre  id="quickSort">
+            <code> quickSort(list,l,r){
+                if( l >= r) return;
+                q  = partition(list,l,r);
+                quickSort(list,l,q-1);
+                quickSort(list,q+1);
+            }
+            partition(list,l,r){
+                x = list[r];
+                i = l-1; 
+                for( j = p to r -1){
+                    if(list[j] < x){
+                        i++;
+                        swap(list,i,j)
+                    }
+
+                }
+                swap(list,i+1,r);
+                return i+1;
+            }
+            </code>
+        </pre>
+        
+    </div>
 </body>
 </html>

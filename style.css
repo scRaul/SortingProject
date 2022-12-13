@@ -1,0 +1,22 @@
+
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: rgb(123, 115, 141);
+    color: white
+}
+canvas{
+    display: block;
+    margin: 20px auto;
+}
+#insertSort{
+    display: none;
+}
+#quickSort{
+    display: none;
+}
+#bubbleSort{
+    display: none;
+}
