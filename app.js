@@ -11,10 +11,11 @@ var screenW = 501;
 var screenH = 250;
 const incrementsY = incrementsX / yDiff;
 
-var screen = new Screen(screenW,screenH,incrementsX,'screenA');
-
 var input = new Input();
 var sorter = new BarSorter(); 
+var screen = new Screen(screenW,screenH,incrementsX,'screenA');
+
+
 
 const fastFPS = 120; 
 const slowFPS = 10; 
