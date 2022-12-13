@@ -8,7 +8,7 @@ const yDiff = 2;
 const debugging = true; 
 
 var screenW = 501; 
-var screenH = screenW / yDiff; 
+var screenH = 250;
 const incrementsY = incrementsX / yDiff;
 
 var screen = new Screen(screenW,screenH,incrementsX,'screenA');

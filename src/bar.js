@@ -142,8 +142,6 @@ class BarSorter{
     }
 
 }
-
-
 //wait some time beofre continuing  // return 0 ;
 function incrementAfterDelay() {
     return new Promise((resolve) => {
